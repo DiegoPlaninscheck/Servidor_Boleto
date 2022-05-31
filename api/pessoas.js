@@ -1,5 +1,4 @@
 const express = require('express');
-const res = require('express/lib/response');
 const router = express.Router();
 
 const pessoas = [
@@ -9,10 +8,11 @@ const pessoas = [
 ]
 
 function criarPessoas(pessoa){
-    if(pessoa.cpf == undefined || pessoa.nome == undefined || pessoa.cpf == "" || pessoa.nome == ""){
-        res.status(400).send("ANTA")
+    if(pessoa.cpf == null || pessoa.nome == null || pessoa.cpf == "" || pessoa.nome == ""){
+       return new Error("BURRO, é preciso inserir o nome e o cpf!");
     } else {
         pessoa.id = pessoas.length + 1;
+        pessoas.push(pessoa)
         return pessoa;
     }
 }
@@ -46,7 +46,9 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
     const pessoa = criarPessoas(req.body);
-    pessoas.push(pessoa);
+    if(pessoa.constructor.name == "Error"){
+        return res.status(400).send(pessoa.message);
+    }
     res.json(pessoa);
 })
 
