@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+//terminar delete
+
 const pessoas = [
     {id: 1, nome: "Diego", cpf: "12345678910"},
     {id: 2, nome: "João", cpf: "01987654321"},
@@ -27,13 +29,13 @@ function buscarPessoa(req){
     return pessoa;
 }
 
-// function editarPessoas(pessoa){
+function editarPessoas(pessoa, index){
+    pessoas[index] = pessoa;
+}
 
-// }
-
-// function deletarPessoas(pessoa){
-
-// }
+function deletarPessoas(pessoa){
+    pessoas.splice(pessoa, 1);
+}
 
 
 router.get("/", (req, res) => {
@@ -52,22 +54,28 @@ router.post("/", (req, res) => {
     res.json(pessoa);
 })
 
-// router.put("/", (req, res) => {
+router.put("/:id", (req, res) => {
+    const id = req.params.id;
+    const pessoa = req.body;
+    const index = pessoas.findIndex(p => p.id == id);
+    pessoa.id = id;
+    editarPessoas(pessoa, index);
+    res.json(pessoas);
+})
 
-// })
-
-// router.delete("/", (req, res) => {
-
-// })
+router.delete("/:id", (req, res) => {
+    const id = req.params.id;
+    const pessoa = pessoas.findIndex(p => p.id == id)
+    deletarPessoas(pessoa);
+    res.json(pessoas);
+})
 
 
 module.exports = {
     router,
     criarPessoas,
     buscarPessoas,
-    buscarPessoa
+    buscarPessoa,
+    editarPessoas,
+    deletarPessoas
 }
-
-
-
-
