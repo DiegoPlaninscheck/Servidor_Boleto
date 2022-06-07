@@ -39,8 +39,11 @@ function editarPessoas(pessoa, index) {
   pessoas[index] = pessoa;
 }
 
-function deletarPessoas(pessoa) {
-  pessoas.splice(pessoa, 1);
+function deletarPessoas(pessoa, boleto) {
+  console.log(pessoa.id, boleto.id_pessoa);
+  if(boleto.id_pessoa != pessoa.id){
+    pessoas.splice(pessoa, 1);
+  }
 }
 
 router.get("/", (req, res) => {
@@ -73,18 +76,8 @@ router.delete("/:id", (req, res) => {
   const pessoa = pessoas.find((p) => p.id == id);
   const boletos = buscarboletos();
   const boleto = boletos.find((b) => b.id_pessoa == pessoa.id)
-  console.log(boleto.id_pessoa);
-  console.log(pessoa.id);
-  if(boleto.id_pessoa = pessoa.id){
-    deletarPessoas(pessoa);
-  }
-//   for (let i = 0; i < boletos.length; i++) {
-//     console.log(boletos[i].id_pessoa, " : ", pessoa.id);
-//     if ((boletos[i].id_pessoa != pessoa.id)) {
-//       console.log("Entro");
-      
-//     }
-//   }
+  boleto.id_pessoa = pessoa.id;
+  deletarPessoas(pessoa, boleto);
   res.json(pessoas);
 });
 
