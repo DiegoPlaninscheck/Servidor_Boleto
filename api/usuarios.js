@@ -1,7 +1,6 @@
 const express = require('express')
+const { buscarboletos } = require("./boletos");
 const router = express.Router();
-
-//terminar delete
 
 const users = [
     {id: 1, nome: "diego", senha: "123"},
@@ -33,8 +32,8 @@ function editarusers(user, index){
     users[index] = user;
 }
 
-function deletarusers(user){
-    users.splice(user, 1);
+function deletarusers(index){
+    users.splice(index, 1);
 }
 
 
@@ -65,8 +64,12 @@ router.put("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
-    const user = users.findIndex(p => p.id == id)
-    deletarusers(user);
+    const user = users.find(p => p.id == id)
+    const boletos = buscarboletos();
+    const boleto = boletos.find(b => b.id_user == user.id)
+    if(boleto == null){
+        deletarusers(user.id - 1);
+    }
     res.json(users);
 })
 

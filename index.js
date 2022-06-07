@@ -9,7 +9,7 @@ const port = 3000;
 
 app.use(express.json());
 app.use("/api/pessoas", pessoas.router)
-// app.use("/api/users", users.router)
+app.use("/api/users", users.router)
 app.use("/api/boletos", boletos.router)
 
 app.get("/", (req, res) => {
