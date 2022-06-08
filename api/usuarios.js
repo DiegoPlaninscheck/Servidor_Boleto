@@ -10,7 +10,7 @@ const users = [
 
 function criarusers(user){
     if(user.senha == null || user.nome == null || user.senha == "" || user.nome == ""){
-       return new Error("BURRO, é preciso inserir o nome e o senha!");
+       return new Error("É preciso inserir o nome e o senha! Sendo validos");
     } else {
         user.id = users.length + 1;
         users.push(user)
