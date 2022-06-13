@@ -1,84 +1,44 @@
 const express = require('express')
-const { buscarboletos } = require("./boletos");
 const router = express.Router();
-
-const users = [
-    {id: 1, nome: "diego", senha: "123"},
-    {id: 2, nome: "jao", senha: "321"},
-    {id: 3, nome: "thigas", senha: "456"},
-]
-
-function criarusers(user){
-    if(user.senha == null || user.nome == null || user.senha == "" || user.nome == ""){
-       return new Error("É preciso inserir o nome e o senha! Sendo validos");
-    } else {
-        user.id = users.length + 1;
-        users.push(user)
-        return user;
-    }
-}
-
-function buscarusers(){
-    return users;
-}
-
-function buscaruser(req){
-    const id = req.params.id;
-    const user = users.find(p => p.id == id);
-    return user;
-}
-
-function editarusers(user, index){
-    users[index] = user;
-}
-
-function deletarusers(index){
-    users.splice(index, 1);
-}
-
+const funcoesUsuario = require("./function/fuctionUsuario")
+const funcoesBoleto = require("./function/fuctionBoleto")
 
 router.get("/", (req, res) => {
-    res.json(buscarusers());
+    res.json(funcoesUsuario.buscarUsuarios());
 })
 
 router.get("/:id", (req, res) => {
-    res.json(buscaruser(req));
+    res.json(funcoesUsuario.buscarUsuario(req.params.id));
 })
 
 router.post("/", (req, res) => {
-    const user = criarusers(req.body);
-    if(user.constructor.name == "Error"){
-        return res.status(400).send(user.message);
+    const user = req.body
+    if(user.nome != null || user.senha != null || user.senha != "" || user.nome != ""){
+        funcoesUsuario.criarUsers(user);
+        res.json(user)
+    } else {
+        res.status(400).send("É preciso inserir o nome e o senha!");
     }
-    res.json(user);
 })
 
 router.put("/:id", (req, res) => {
     const id = req.params.id;
     const user = req.body;
-    const index = users.findIndex(p => p.id == id);
-    user.id = id;
-    editarusers(user, index);
-    res.json(users);
+    funcoesUsuario.editarUser(id, user);
+    res.json(user);
 })
 
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
-    const user = users.find(p => p.id == id)
-    const boletos = buscarboletos();
-    const boleto = boletos.find(b => b.id_user == user.id)
-    if(boleto == null){
-        deletarusers(user.id - 1);
+    const boletos = funcoesBoleto.buscarBoletoUsuario(id)
+    if(boletos == ""){
+        funcoesUsuario.deletarUsers(id);
+        res.json(funcoesUsuario.buscarUsuarios())
+    } else {
+        res.status(400).send("Não é possível deletar o usuário, pois existem boletos vinculados a ele!");
     }
-    res.json(users);
 })
 
-
 module.exports = {
-    router,
-    criarusers,
-    buscarusers,
-    buscaruser,
-    editarusers,
-    deletarusers
+    router
 }
