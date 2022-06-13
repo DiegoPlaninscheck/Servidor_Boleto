@@ -13,7 +13,7 @@ function buscarboleto(id){
 
 function buscarBoletoPessoa(id){
     const listaBoletoPessoa = []
-    listaBoletoPessoa.forEach(e => {
+    boletos.forEach(e => {
         if(e.id_pessoa == id){
             listaBoletoPessoa.push(e)
         }
@@ -23,7 +23,7 @@ function buscarBoletoPessoa(id){
 
 function buscarBoletoUsuario(id){
     const listaBoletoUser = []
-    listaBoletoUser.forEach(e => {
+    boletos.forEach(e => {
         if(e.id_user == id){
             listaBoletoUser.push(e)
         }

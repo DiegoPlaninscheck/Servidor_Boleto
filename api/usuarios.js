@@ -13,11 +13,11 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
     const user = req.body
-    if(user.nome != null || user.senha != null || user.senha != "" || user.nome != ""){
+    if(user.nome == null || user.senha == null || user.senha == "" || user.nome == ""){
+        res.status(400).send("É preciso inserir o nome e a senha!");
+    } else {
         funcoesUsuario.criarUsers(user);
         res.json(user)
-    } else {
-        res.status(400).send("É preciso inserir o nome e o senha!");
     }
 })
 
@@ -31,7 +31,7 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
     const boletos = funcoesBoleto.buscarBoletoUsuario(id)
-    if(boletos == ""){
+    if(boletos == "" || boletos == null){
         funcoesUsuario.deletarUsers(id);
         res.json(funcoesUsuario.buscarUsuarios())
     } else {

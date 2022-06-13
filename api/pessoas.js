@@ -35,7 +35,7 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
   const boletos = funcoesBoleto.buscarBoletoPessoa(id);
-  if (boletos == "") {
+  if (boletos == "" || boletos == null) {
     funcoesPessoa.deletarPessoa(id);
     res.json(funcoesPessoa.buscarPessoa())
   } else {
