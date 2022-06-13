@@ -25,7 +25,11 @@ function editarUser(id, user){
 
 function deletarUsers(id){
     const index = usuarios.findIndex(e => e.id == id)
-    usuarios.splice(index, 1);
+    if(index < 0){
+        return usuarios;
+    } else {
+        usuarios.splice(index, 1);
+    }
 }
 
 module.exports = { router, buscarUsuarios, buscarUsuario, criarUsers, editarUser, deletarUsers}

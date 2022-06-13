@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const funcoesPessoa = require("./function/functionPessoa")
 const funcoesBoleto = require("./function/fuctionBoleto");
+const { pessoas } = require("./listas");
 
 
 router.get("/", (req, res) => {
@@ -30,6 +31,7 @@ router.put("/:id", (req, res) => {
   const id = req.params.id;
   const pessoa = req.body;
   funcoesPessoa.editarPessoas(id, pessoa);
+  return pessoas;
 });
 
 router.delete("/:id", (req, res) => {
@@ -37,7 +39,7 @@ router.delete("/:id", (req, res) => {
   const boletos = funcoesBoleto.buscarBoletoPessoa(id);
   if (boletos == "" || boletos == null) {
     funcoesPessoa.deletarPessoa(id);
-    res.json(funcoesPessoa.buscarPessoa())
+    res.json(funcoesPessoa.buscarPessoas())
   } else {
     res.status(400).send("Pessoa possui boletos!");
   }
